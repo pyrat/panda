@@ -416,9 +416,13 @@ def send_notification
     self.parent_video.send_status_update_to_client
     self.notification = 'success'
     self.save
-    Merb.logger.info "Notification successfull"
+    Merb.logger.info "Notification successful"
+  rescue InvalidParameterValue
+    self.notification = 'success'
+    self.save
   rescue
     # Increment num retries
+    Merb.logger.info "Number of retries = #{self.notification}"
     if self.notification.to_i >= Panda::Config[:notification_retries]
       self.notification = 'error'
     else
@@ -433,20 +437,17 @@ def send_status_update_to_client
   Merb.logger.info "Sending notification to #{self.state_update_url}"
 
   params = {"video" => self.show_response.to_yaml}
-  begin
-    uri = URI.parse(self.state_update_url)
-    http = Net::HTTP.new(uri.host, uri.port)
 
-    req = Net::HTTP::Post.new(uri.path)
-    if uri.user and uri.password
-      req.basic_auth uri.user, uri.password
-    end
-    req.form_data = params
-    response = http.request(req)
+  uri = URI.parse(self.state_update_url)
+  http = Net::HTTP.new(uri.host, uri.port)
 
-  rescue
-    # do nothing
+  req = Net::HTTP::Post.new(uri.path)
+  if uri.user and uri.password
+    req.basic_auth uri.user, uri.password
   end
+  req.form_data = params
+  response = http.request(req)
+
 
   unless response.code.to_i == 200
     ErrorSender.log_and_email("notification error", "Error sending notification for parent video #{self.key} to #{self.state_update_url} (POST)
