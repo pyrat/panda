@@ -367,7 +367,7 @@ class Video < SimpleDB::Base
     
     # Common attributes for originals and encodings
     if self.status == 'original' or self.encoding?
-      [:filename, :original_filename, :width, :height, :duration].each do |k|
+      [:filename, :width, :height, :duration].each do |k|
         r[:video][k] = self.send(k)
       end
       r[:video][:screenshot]  = self.clipping.filename(:screenshot)
