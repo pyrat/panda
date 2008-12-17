@@ -444,21 +444,23 @@ def send_status_update_to_client
     req.form_data = params
     response = http.request(req)
 
-    unless response.code.to_i == 200
-      ErrorSender.log_and_email("notification error", "Error sending notification for parent video #{self.key} to #{self.state_update_url} (POST)
-
-      REQUEST PARAMS
-      #{"="*60}\n#{params.to_yaml}\n#{"="*60}
-
-      RESPONSE
-      #{response.code} #{response.message} (#{response.body.length})
-      #{"="*60}\n#{response.body}\n#{"="*60}")
-
-      raise NotificationError
-    end
-  rescue InvalidParameterValue
+  rescue
     # do nothing
   end
+
+  unless response.code.to_i == 200
+    ErrorSender.log_and_email("notification error", "Error sending notification for parent video #{self.key} to #{self.state_update_url} (POST)
+
+    REQUEST PARAMS
+    #{"="*60}\n#{params.to_yaml}\n#{"="*60}
+
+    RESPONSE
+    #{response.code} #{response.message} (#{response.body.length})
+    #{"="*60}\n#{response.body}\n#{"="*60}")
+
+    raise NotificationError
+  end
+
 
 
 end
