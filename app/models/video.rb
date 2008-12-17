@@ -417,9 +417,6 @@ def send_notification
     self.notification = 'success'
     self.save
     Merb.logger.info "Notification successful"
-  rescue InvalidParameterValue
-    self.notification = 'success'
-    self.save
   rescue
     # Increment num retries
     Merb.logger.info "Number of retries = #{self.notification}"
