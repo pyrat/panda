@@ -417,6 +417,7 @@ def send_notification
     Merb.logger.info "GOT HERE ALSO!"
     self.notification = 'success'
     self.save
+    Merb.logger.info "BUT NOT HERE!"
     Merb.logger.info "Notification successful"
   rescue
     # Increment num retries
