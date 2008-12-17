@@ -414,6 +414,7 @@ def send_notification
   self.last_notification_at = Time.now
   begin
     self.parent_video.send_status_update_to_client
+    Merb.logger.info "GOT HERE ALSO!"
     self.notification = 'success'
     self.save
     Merb.logger.info "Notification successful"
@@ -457,8 +458,6 @@ def send_status_update_to_client
 
     raise NotificationError
   end
-
-  Merb.logger.info "ALL IS WELL WE MADE IT HERE"
 
 end
 
