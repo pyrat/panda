@@ -416,6 +416,7 @@ def send_notification
     self.parent_video.send_status_update_to_client
     Merb.logger.info "GOT HERE ALSO!"
     self.notification = 'success'
+    self.original_filename = self.original_filename.to_s[0,100]
     self.save
     Merb.logger.info "BUT NOT HERE!"
     Merb.logger.info "Notification successful"
