@@ -432,7 +432,11 @@ end
 
 def send_status_update_to_client
   Merb.logger.info "Sending notification to #{self.state_update_url}"
-
+  
+  Merb.logger.info self.show_response.inspect
+  Merb.logger.info "--- --- ---"
+  Merb.logger.info self.show_response.to_yaml
+  
   params = {"video" => self.show_response.to_yaml}
 
   uri = URI.parse(self.state_update_url)
